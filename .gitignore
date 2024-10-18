@@ -1,0 +1,58 @@
+# Ignorer les environnements virtuels
+env/
+venv/
+.venv/
+
+# Ignorer les fichiers Python compilés
+__pycache__/
+*.py[cod]
+*.so
+
+# Ignorer les fichiers de logs
+logs/
+*.log
+
+# Ignorer les fichiers de cache et temporaires
+.cache/
+*.tmp
+*.bak
+*.swp
+
+# Ignorer les données brutes et temporaires
+data/raw/
+data/processed/
+data/augmentation/
+
+# Si vous souhaitez conserver certains fichiers, vous pouvez les exclure de l'ignorance
+!data/processed/cleaned_french_sentences.csv
+!data/augmentation/augmented_creole_pairs.csv
+!data/raw/creole_french_pairs_reference.xlsx
+!data/raw/creole_french_pairs.csv
+
+# Ignorer les modèles entraînés et les checkpoints
+models/
+*.h5
+*.ckpt
+*.pt
+*.pth
+
+# Ignorer les checkpoints des notebooks Jupyter
+notebooks/.ipynb_checkpoints/
+
+# Ignorer les fichiers de l'IDE
+.vscode/
+.idea/
+*.iml
+
+# Ignorer les fichiers système
+.DS_Store
+Thumbs.db
+
+# Ignorer les fichiers de configuration locaux
+config.yaml
+config.json
+settings.py
+
+# Ignorer les fichiers de test
+tests/__pycache__/
+tests/*.pyc

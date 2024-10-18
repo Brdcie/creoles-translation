@@ -1,0 +1,46 @@
+import pandas as pd
+from pathlib import Path
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.cluster import KMeans
+import nltk
+from nltk.corpus import stopwords
+
+# Télécharger les stop words français
+nltk.download('stopwords')
+french_stop_words = stopwords.words('french')
+
+# Définir le chemin de base en utilisant pathlib
+base_path = Path("/Users/brigitte/Dropbox/0-GWADA/traduction-creole-guadeloupeen/data/processed/")
+
+# Charger les phrases françaises nettoyées une seule fois
+input_file_path = base_path / "cleaned_french_sentences.csv"
+french_sentences = pd.read_csv(input_file_path)
+
+# Utiliser TF-IDF pour vectoriser les phrases et faire du clustering
+vectorizer = TfidfVectorizer(max_features=1000, stop_words=french_stop_words)
+X = vectorizer.fit_transform(french_sentences['phrase'])
+
+# Appliquer KMeans pour identifier des catégories potentielles
+num_categories = 5  # Supposons 5 catégories pour commencer
+kmeans = KMeans(n_clusters=num_categories, random_state=42)
+french_sentences['category'] = kmeans.fit_predict(X)
+
+# Définir des labels textuels pour chaque catégorie
+category_labels = {
+    0: 'Vie Quotidienne',
+    2: 'Culture et Patrimoine',
+    4: 'Situations d’Urgence',
+    3: 'Conversations Formelles',
+    1: 'Tourisme et Loisirs'
+}
+
+# Mapper les catégories numériques vers des labels textuels
+french_sentences['category_label'] = french_sentences['category'].map(category_labels)
+for i in range(num_categories):
+    print(f"Catégorie {i} :")
+    print(french_sentences[french_sentences['category'] == i]['phrase'].head(10))
+    print("\n")
+
+# Sauvegarder avec les catégories ajoutées sous forme de texte
+output_file_path = base_path / "selected_french_sentences_with_categories_text.csv"
+french_sentences.to_csv(output_file_path, index=False)
