@@ -18,14 +18,34 @@ logs/
 *.bak
 *.swp
 
-# Ignorer les données brutes et temporaires
-data/raw/
-data/processed/
-data/augmentation/
+# Ignorer tous les fichiers dans data/raw/, data/processed/, data/augmentation/
+data/raw/*
+data/processed/*
+data/augmentation/*
+
+# Ignorer les fichiers PDF et autres documents
+*.pdf
+*.epub
+*.xlsx
+*.xlsm
+*.acsm
+*.lcpl
+
+
+
+# Ne pas ignorer les dossiers eux-mêmes
+!data/raw/
+!data/processed/
+!data/augmentation/
+
+# Inclure les fichiers spécifiques
+!data/raw/creole_french_pairs_reference.xlsx
+!data/raw/creole_french_pairs.csv
+!data/processed/cleaned_french_sentences.csv
+
 
 # Si vous souhaitez conserver certains fichiers, vous pouvez les exclure de l'ignorance
 !data/processed/cleaned_french_sentences.csv
-!data/augmentation/augmented_creole_pairs.csv
 !data/raw/creole_french_pairs_reference.xlsx
 !data/raw/creole_french_pairs.csv
 
