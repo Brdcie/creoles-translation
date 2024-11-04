@@ -66,4 +66,7 @@ settings.py
 
 # Tests
 tests/__pycache__/
-tests/*.pyc
+tests/*.pyc# Python cache files
+**/__pycache__/
+.pytest_cache/
+*/**/*.pyc
