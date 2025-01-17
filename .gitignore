@@ -70,3 +70,4 @@ tests/*.pyc# Python cache files
 **/__pycache__/
 .pytest_cache/
 */**/*.pyc
+Capture*.png

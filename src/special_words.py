@@ -50,6 +50,9 @@ SPECIAL_WORDS = {
     "syndicat": "sendika",
     "heureuse" : "érèz",
     "comme" : "kon",
+    "prendre" : "pran",
+    "grande" : "gran",
+    "ville" : "vil",
     #Exception à la règle oi -wa
     "croire": "kwè",
     "voir": "vwè",
@@ -65,7 +68,9 @@ SPECIAL_WORDS = {
     "moi": "mwen",
     "doigt": "dwèt",
     "vouloir" : "vlé",
-    "Guadeloupe" : "vlé",
-
-
+    "rose" : "wòz",
+    "roche" :"wòch",
+    "noir" :"nwè",
+    "rené" :"Réné",
+   
 }

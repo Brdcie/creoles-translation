@@ -16,8 +16,10 @@ def remove_silent_letters(phrase):
             processed_words.append(SPECIAL_WORDS[word.lower()])
             continue  # Passer au mot suivant
         # Si le mot n'est pas spécial, appliquer les règles
+        # Dans remove_silent_letters()
+        word = re.sub(r'(?<!v)(?<!a)ille\b', 'i', word)  # remplacer 'ille' en fin de mot par 'i' sauf après 'v' et 'a'
         word = re.sub(r'aire\b', 'è', word)  # Remplacer 'aire' en fin de mot par 'è'
-        word = re.sub(r's$', '', word)  # Supprimer 's' final
+        word = re.sub(r'(?<!s)s$', '', word)  # Supprimer 's' final sauf après 's'
         word = re.sub(r'ez\b', 'é', word)  # Remplacer 'ez' en fin de mot par 'é'
         word = re.sub(r'ert\b', 'è', word)  # Remplacer 'ert' en fin de mot par 'è'
         word = re.sub(r'(?<![ea])t$', '', word)  # Supprimer 't' final sauf après 'e'et 'a'
@@ -25,7 +27,9 @@ def remove_silent_letters(phrase):
         word = re.sub(r'er\b', 'é', word)  # Remplacer 'er' en fin de mot par 'é'
         word = re.sub(r'([bcdfghjklmnpqrstvwxz])c$', r'\g<1>', word)  # Supprimer 'c' final après consonne    
         word = re.sub(r'p$', '', word)  # Supprimer 'p' final
-        word = re.sub(r'(?<![dcjgqzns])e$', '', word)  # Supprimer 'e' final sauf après 'd' ou 'c' j g z q
+        word = re.sub(r'le\b', '',word)               # 'le' final disparaît
+        word = re.sub(r'n(?:dre|de)\b', 'nn', word)   # règle générale: 'ndre/nde' -> 'nn'
+        word = re.sub(r'(?<![dcjgqzns])e$', '', word)  # Supprimer 'e' final sauf après 'd' ou 'c' j g z q ou s
         word = re.sub(r'(?<!e)(?<!eu)r$', '', word)  # Supprimer 'r' final sauf après 'e' et 'eur' 
         word = re.sub(r'x$', '', word)  # Supprimer 'x' final
         word = re.sub(r'(?<!e)z$', '', word)  # Supprimer 'z' final sauf après 'e'
@@ -46,9 +50,20 @@ def french_to_creole(phrase):
         return SPECIAL_WORDS[phrase.lower()]
     # Si pas dans SPECIAL_WORDS, appliquer les règles de transformation
     phrase = remove_silent_letters(phrase)
-    return apply_creole_rules(phrase)
+    result= apply_creole_rules(phrase)
+    print(f"Résultat final retourné : '{result}'")
+    return result
 
 def apply_creole_rules(phrase):
+    """Applique les règles de transformation du français vers le créole.
+    Chaque transformation est tracée pour faciliter le débogage.
+    
+    Args:
+        phrase (str): La phrase à transformer
+        
+    Returns:
+        str: La phrase transformée
+    """
     print(f"Phrase initiale pour transformation en créole : {phrase}")
     #Enregistrer la casse originale
     original_case = [c.isupper() for c in phrase]
@@ -58,10 +73,19 @@ def apply_creole_rules(phrase):
 
     # Définir une liste de tuples (pattern, replacement) ordonnée du plus spécifique au plus général
     transformation_rules = [
+       # Règle tt
+        (r'tt', 't'),              # Remplacer 'tt' par 't'
+        # Règle 21 : Transformer le 'mm' en 'nm'
+        (r'(?<=[aeiouAEIOU])mm(?=[aeiouAEIOU])', 'nm'),
+        (r'(?<=[aoiAOI])m(?=[aoiAOI])', 'nm'),
+        
         # Règle 7 : +transformer les graphies de [ã] : an, am, en, em --> an
         # Remarque Sylviane devient Sylviàn, butane devient bitàn et conserve bien la prononciation de la deuxième syllable.
         (r'am', 'an'),              # Remplacer 'am' par 'an'
-        (r'en', 'an'),              # Remplacer 'en' par 'an'
+        (r'one', 'òn'),
+        # 'en' → 'an' uniquement au début du mot ou avant une consonne
+        (r'\ben|en(?=[bcdfghjklmnpqrstvwxz])|(?<=[mdtr])ent?\b', 'an'),
+        #(r'en', 'an'),              # Remplacer 'en' par 'an'
         (r'em', 'an'),              # Remplacer 'em' par 'an'
         # Règle 9 : Transformer le son [ʒ] en 'j'
         (r'g(?=[eiéy])', 'j'),        # Remplacer 'g' par 'j' s'il est suivi de 'e', 'i', 'y','é'
@@ -76,20 +100,21 @@ def apply_creole_rules(phrase):
         (r'aim', 'en'),              # Remplacer 'aim' par 'en'
         (r'ain', 'en'),              # Remplacer 'ain' par 'en'
         (r'im', 'en'),               # Remplacer 'im' par 'en'
+        
          # Règle 6 : Transformer les graphies du son [e] en 'é'
         (r'ez\b', 'é'),               # Remplacer 'ez' en fin de mot par 'é'
         (r'et\b', 'é'),               # Remplacer 'et' en fin de mot par 'é'
         (r'ed\b', 'é'),               # Remplacer 'ed' en fin de mot par 'é'
         (r'ei', 'é'),                 # Remplacer 'ei' par 'é'
-        #(r'ef\b', 'é'),               # Remplacer 'ef' en fin de mot par 'é'
         (r'eh', 'é'),                 # Remplacer 'eh' par 'é'
-       # (r'hé', 'é'),                 # Remplacer 'hé' par 'é'
         (r'ée', 'é'),                 # Remplacer 'ée' par 'é'
         (r'ay\b', 'é'),               # Remplacer 'ay' en fin de mot par 'é'
         (r'ey\b', 'é'),               # Remplacer 'ey' en fin de mot par 'é'
         (r'e(?=(\w)\1)', 'é'),        # Remplacer 'e' suivi d'une consonne double par 'é'
         (r'aire\b','è'),              # Remplacer 'aire' en fin de mot par 'è'
-        (r'ai', 'é'),                 # Remplacer 'ai' en fin de mot par 'é'
+        (r'ai\b', 'é'),                 # Remplacer 'ai' en fin de mot par 'é'
+        (r'aill\b', 'ay'),                 # Remplacer 'ai' en fin de mot par 'é'
+
          # Règle 3 : graphies du son [s] en créole guadeloupéen
          (r'tion', 'syon'),          # Remplacer 'tion' par 'syon' en premier car plus spécifique
          (r'(?<=[aeéiouAEIOU])s(?=[aeéiouAEIOU])', 'z'),
@@ -132,16 +157,13 @@ def apply_creole_rules(phrase):
         # Règle 4 : Mutation du son [Ø]'e' ou 'eu' en 'é'
         (r'eu\b', 'é'),            # Remplacer 'eu' par 'é'
         (r'\be\b', 'é'),             # Remplacer 'e' par 'é'
-        # Règle 21 : Transformer le 'mm' en 'nm'
-        (r'(?<=[aeiouAEIOU])mm(?=[aeiouAEIOU])', 'nm'),
+        
         # Règle 20 : doublement du n entre deux voyelles si la première voyelle est un a
         (r'an([aeiou])', 'ann\\1'),  # Remplacer 'ana/e/i/o/u' par 'anna/e/i/o/u'
         # Règle 1 : Supprimer le 'e' final (au cas où il n'a pas été supprimé précédemment)
         (r'e$', ''),                  # Supprimer 'e' final
         (r'de', 'd'),                 # remplacer'de' par 'd'
-
         # Règle 13 : Graphies du son [f]
-        (r'f', 'f'),              # Remplacer 'f' par 'f' (consistance)
         (r'ff', 'f'),              # Remplacer 'ff' par 'f'
         (r'ph', 'f'),              # Remplacer 'ph' par 'f'
         
@@ -149,9 +171,9 @@ def apply_creole_rules(phrase):
         # si le son 'r' est conservé, il s'écrit 'w'
         (r'or', 'ò'),              # Remplacer 'or' par 'ò'
         (r'ar(?=[bcdfghjklmnpqrstvwxyz])', 'a'),
-
         (r'ir', 'i'),              # Remplacer 'ir par 'i'
         (r'er', 'è'),              # Remplacer 'er' par 'è'
+        (r'eu', 'è'),              # Remplacer 'er' par 'è'
         (r'our', 'ou'),            # Remplacer 'our' par 'ou'
         (r'ur', 'i'),              # Remplacer 'ur' par 'i'
         # Règle 16  Disparition de 're' à la fin d'une syllable = conservation de re en début de mot
@@ -170,7 +192,6 @@ def apply_creole_rules(phrase):
         (r'ey\b', 'é'),               # Remplacer 'ey' en fin de mot par 'é'    
         # Règle 22 :
          (r'([^vm])ille\b', '\\1i'),    # 'ille' devient 'i' quand prononcé [ij]
-         (r'le\b', ''),                 # 'le' final disparaît
          (r'(?<=a)ll', 'l'),  # Remplacer 'll' par 'l' lorsqu'il est précédé de 'a'
         # Règle 23 : Graphies du son [g] 
         (r'gu(?=[ei])', 'g'),  # 'gu' devant 'e/i' devient 'g' (guitare -> gita)
@@ -182,29 +203,43 @@ def apply_creole_rules(phrase):
          (r'(?<!s)i(?=[aou])', 'y'),  # 'marier' -> 'mayé' mais N'applique pas la règle si précédé de 's'
          (r'ï', 'y'),                # 'Haïti' -> 'Ayiti'
          (r'ye\b', 'y'),             # 'papaye' -> 'papay'
-        # Règle 25 : 'ndre' et 'nde' -> 'nn' avec exceptions
-         (r'prendre\b', 'pran'),      # exception: 'prendre' -> 'pran'
-         (r'grande?\b', 'gran'),      # exception: 'grand(e)' -> 'gran'
-         (r'n(?:dre|de)\b', 'nn'),    # règle générale: 'ndre/nde' -> 'nn'
+         (r'ail\b', 'ay'),             # 'papaye' -> 'papay'
+
         # Règle 26 : 'm(b/br/bl)e' final -> 'nm'
          (r'm(?:b(?:re|le)|be)\b', 'nm'),    # 'mbre/mble/mbe' en fin de mot devient 'nm' 
         # Règle 8 : Transformer les graphies du son [o] en 'o'
         # Remarque : téléphone devient téléfòn et se prononce comme en français; en forme --> anfòm
         (r'eau', 'o'),                # Remplacer 'eau' par 'o'
         (r'au', 'o'),                 # Remplacer 'au' par 'o'
+        #(r'phone\b', 'fòn'),  # Règle spécifique pour 'phone'
         # Règle 11 pour 'x' entre voyelles : 'x' -> 'ks'
         # Remarque : +en fait le X peut etre s, ks, gz, z
         (r'(?<=[aeéiouyAEIOUY])x(?=[aeéiouyAEIOUY])', 'ks'),
-     
+        # Règle 17 : Mutation du son [ə]
+        (r'(?<=[bcdfghjklmnpqrstvwxz])e(?=[bcdghjklpqtvwxz])', 'i'),
+        # Règle 19 :
+        # R devient w devant o/ò
+        (r'r(?=[oò])', 'w'),  # rose → wòz, roche → wòch
+        # R devient w dans les groupes consonantiques suivis de o/ò/è
+        (r'(?<=[bcdfghjklmnpqstvxz])r(?=[oòè])', 'w'),  # crapaud → krapo, noir → nwè
+        # R initial reste r devant é/i 
+       (r'\br(?=[éi])', 'r'),  # René → réné, riz → ri
+        # R après consonne reste r devant é/i
+       (r'(?<=[bcdfghjklmnpqstvxz])r(?=[éi])', 'r'),  # crédit → krédi
     ]
     # Appliquer les règles de transformation
     for pattern, replacement in transformation_rules:
      old_phrase = phrase
      phrase = re.sub(pattern, replacement, phrase, flags=re.IGNORECASE)
-     if old_phrase != phrase:
-        print(f"Après {pattern} → {replacement} : {phrase}")
-    result = ''.join(c.upper() if upper else c for c, upper in zip(phrase, original_case))
-    print(f"Phrase finale transformée en créole : {phrase}")
+     result = phrase  # Garder le mot transformé tel quel
+     if len(original_case) > 0:  # S'il y avait des majuscules dans le mot d'origine
+        # Appliquer la casse d'origine uniquement sur les caractères existants
+        result_chars = list(result)
+        for i, upper in enumerate(original_case):
+            if i < len(result_chars):  # Ne traiter que les caractères existants
+                result_chars[i] = result_chars[i].upper() if upper else result_chars[i]
+        result = ''.join(result_chars)
+
     return result
 
 # Fonction principale pour effectuer la transformation complète
