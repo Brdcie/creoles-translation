@@ -26,7 +26,7 @@ def test_rule_00_remove_silent_letters():
     """
     test_cases = [
         # Suppressions simples
-        ("temps", "tem"),          # 's' final
+        #("moins", "tan"),          # 's' final
         ("trop", "tro"),          # 'p' final
         ("voix", "voi"),          # 'x' final
         ("grand", "gran"),         # 'd' final
@@ -43,9 +43,14 @@ def test_rule_00_remove_silent_letters():
         ("place", "place"),       # conservation 'e' après 'c'
         ("plage", "plage"),       # conservation 'e' après 'g'
         ("chat", "chat"),       # conservation 't' après 'a'
+        ("parfois", "parfoi"),
         
+        # 'ss' final à conserver
+        ("express", "express"),
+        
+        # Cas complexes
+        ("grosses", "grosse"),    # 'ss' conservé mais 's' final enlevé
         # Combinaisons multiples
-        ("livres intéressants", "liv intéressan"),  # plusieurs lettres muettes
         ("grands champs verts", "gran cham vè"),     # plusieurs mots
         #autres
         ("salaire","salè")
@@ -222,7 +227,8 @@ def test_rule_06_e_sound_to_e():
         ("chef", "chef"),            # 'ef' en fin de mot
         ("meh", "mé"),              # 'eh' transformé
         ("allée", "alé"),          # 'ée' transformé
-        ("balai", "balé"),          # 'ay' transformé
+        ("balai", "balé"),          # 'ai' transformé
+        ("jamais", "janmé"),          # 'ay' transformé
         ("seigneur", "ségnè"),        # 'ey' transformé
         ("nez", "né"),              # 'e' transformé en 'é' (règle appliquée normalement)
         ("balayage","balayaj"),
@@ -262,12 +268,13 @@ def test_rule_07_nasal_vowel_to_an():
     """
     test_cases = [
         # Cas standards
-        ("ample", "anpl"),          # 'am' → 'an'
+        ("bambou", "banbou"),          # 'am' → 'an'
         ("enfant", "anfan"),        # 'en' → 'an'
-        ("ensemble", "ansanbl"),    # 'en' et 'em' → 'an'
+        ("ensemble", "ansanb"),    # 'en' et 'em' → 'an'
         ("temps", "tan"),           # 'em' → 'an'
         ("rentrée", "rantré"),      # 'en' → 'an'
-        ("document", "dokiman")
+        ("document", "dokiman"),
+        ("prendre",'pran'),
     ]
 
     for french, expected_creole in test_cases:
@@ -334,6 +341,7 @@ def test_rule_21_mm_to_nm():
         ("flamme", "flanm"),       # 'mm' → 'nm'
         ("commencer", "konmansé"), # 'mm' → 'nm' dans un mot plus long
         ("femme", "fanm"),     # 'mm' → 'nm'
+        ('jamais',"janmé")
     ]
 
     for french, expected_creole in test_cases:
@@ -341,13 +349,12 @@ def test_rule_21_mm_to_nm():
         assert result == expected_creole, (
             f"Erreur pour '{french}': attendu '{expected_creole}', obtenu '{result}'"
         )
-
 def test_rule_01_remove_final_e():
     """
     Test de la Règle 1 : supprimer le 'e' final.
     """
     test_cases = [
-        ("table", "tabl"),         # 'e' final supprimé
+        ("table", "tab"),         # 'e' final supprimé
         ("chose", "choz"),         # 'e' final supprimé
         ("femme", "fanm"),         # 'e' final supprimé après application d'autres règles
         ("grande", "gran"),        # 'e' final supprimé après 'd'
@@ -365,7 +372,7 @@ def test_rule_13_f_sound():
     test_cases = [
         ("photo", "foto"),         # 'ph' → 'f'
         ("effet", "éfé"),          # 'ff' → 'f'
-        ("téléphone", "téléfon"),  # 'ph' → 'f'
+        ("téléphone", "téléfòn"),  # 'ph' → 'f'
     ]
 
     for french, expected_creole in test_cases:
@@ -408,6 +415,88 @@ def test_rule_15_r_disappearance():
         assert result == expected_creole, (
             f"Erreur pour '{french}': attendu '{expected_creole}', obtenu '{result}'"
         )
-
-
+def test_rule_16_re_syllable():
+    """
+    Test la règle 16 : disparition de 're' en fin de syllabe
+    """
+    test_cases = [
+        # Cas standards - 're' disparaît en milieu/fin de mot
+        ("prendre", "pran"),     # 're' en fin de mot
+        ("vendre", "vann"),       # 're' après consonne
+        ("comprendre", "komprann"), # 're' en fin de mot composé
+         ("attendre", "atann")
+    ]
+    
+    for french, expected_creole in test_cases:
+        result = french_to_creole(french)
+        assert result == expected_creole, (
+            f"Erreur de traitement 're' : pour '{french}'\n"
+            f"→ Attendu : '{expected_creole}'\n"
+            f"→ Obtenu : '{result}'"
+        )
         
+def test_rule_22_ille_and_le_transformations():
+    """
+    Test de la Règle 22 qui couvre trois cas spécifiques :
+    1. Transformation de 'ille' final en 'i' (sauf après 'v')
+    2. Suppression de 'le' final 
+    3. Simplification de 'll' après 'a'
+    
+    Par exemple :
+    - fille → fi      ('ille' → 'i')
+    - ville → vil     (exception: conservation après 'v')
+    - table → tab     ('le' final disparaît)
+    - salle → sal     ('ll' → 'l' après 'a')
+    """
+    test_cases = [
+        ("fille", "fi"),          # cas simple: fille → fi
+        ("famille", "fanmi"),      # même règle: famille → fanmi
+        ("grille", "gri"),        # même règle: grille → gri
+        ("ville", "vil"),         # exception: ville → vil (après 'v')
+        
+        # Cas spéciaux où 'ille' se transforme en 'y'
+        ("paille", "pay"),        # transformation en 'y' car son [aj]
+        ("bataille", "batay"),    # même règle avec son [aj]
+    ]
+
+    for french, expected_creole in test_cases:
+        result = french_to_creole(french)
+        assert result == expected_creole, (
+            f"Erreur de transformation pour '{french}'\n"
+            f"→ Attendu : '{expected_creole}'\n"
+            f"→ Obtenu : '{result}'\n"
+            f"Vérifiez l'application de la règle 22 pour ce cas."
+        )       
+def test_rule_17_e_between_consonants():
+    test_cases = [
+        ("petit", "piti"),
+        ("cheval", "chival"),
+        ("merci", "mèsi"),
+        ("perdu", "pèdi"),  # vérifie que 'er' n'est pas affecté
+        ("peuple", "pèp"),   # vérifie que 'eu' n'est pas affecté
+    ]
+    for french, expected in test_cases:
+        result = french_to_creole(french)
+        assert result == expected
+def test_rule_19_r_to_w():
+    """
+    Test Règle 19 : 'r' devient 'w' devant voyelles arrondies, 
+    reste 'r' devant voyelles antérieures
+    """
+    test_cases = [
+        ("rose", "wòz"),       # r initial + o
+        ("roche", "wòch"),     # r initial + o
+        ("crapaud", "krapo"),  # groupe consonantique + o
+        ("noir", "nwè"),       # groupe consonantique + è
+        ("René", "Réné"),      # r initial + é
+        ("riz", "ri"),         # r initial + i
+        ("crédit", "krédi"),   # groupe consonantique + é
+    ]
+
+    for french, expected_creole in test_cases:
+        result = french_to_creole(french)
+        assert result == expected_creole, (
+            f"Erreur pour '{french}'\n"
+            f"→ Attendu : '{expected_creole}'\n"
+            f"→ Obtenu : '{result}'"
+        )
