@@ -7,36 +7,25 @@ SPECIAL_WORDS = {
     "quelles": "ki",
     "que": "ke",
     "qui" :"ki",
-    
-    # Agglutinations avec "l"
-    "l'église": "légliz",
-    "l'orage": "lòraj", 
-    "l'eau": "dlo",
-    "l'argent": "lajan",
-    "l'heure": "lè",
-    "l'habitude": "labitid",
-    "l'école": "lékòl",
-    "l'année": "lanné",
-    "l'esprit": "lèspri",
-    "l'air": "lè",
-    "l'herbe": "zèb",
-    "l'huile": "lwil",
-    
-    # Agglutinations avec "de/du"
+      
+    # Articles indéfinis et partitifs
     "du vin": "diven",
     "de l'essence": "lésans",
-    "du rhum": "wonm",
-    "du pain": "dopen",
     "de l'eau": "dlo",
-    
-    # Agglutinations avec "la"
+    # Articles définis déjà intégrés - pas de -la
     "la nuit": "lannuit",
     "la mer": "lanmè",
     "la pluie": "lapli",
-    "la porte": "lapòt",
-    "la route": "lawout",
-    "la maison": "lakay",
-    
+    # Articles définis agglutinatifs - conserver le -la
+    "du vin": "diven",
+    "l'église": "légliz-la",
+    "l'orage": "lòraj-la", 
+    "l'eau": "dlo-la",
+    "l'argent": "lajan-la",
+    "l'heure": "lè-la",
+    "l'habitude": "labitid-la",
+    "l'école": "lékòl-la",
+    "l'année": "lanné-la",
     # Cas particuliers
     "au bord de la mer": "bòdlanmè",
     "grand bois": "granbwa",
@@ -72,5 +61,6 @@ SPECIAL_WORDS = {
     "roche" :"wòch",
     "noir" :"nwè",
     "rené" :"Réné",
+
    
 }

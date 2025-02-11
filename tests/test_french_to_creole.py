@@ -11,8 +11,7 @@ pytest test_french_to_creole.py -k "rule_02"  # Test règle spécifique
 """
 
 import pytest
-from src.french_to_creole import french_to_creole, remove_silent_letters
-
+from src.french_to_creole import french_to_creole, remove_silent_letters,detect_tense, transform_french_to_creole
 # SECTION 0: Tests préliminaires
 #------------------------------------------------------------
 
@@ -67,11 +66,11 @@ def test_rule_00_agglutinated_words():
     """
     test_cases = [
         # Tests avec l'article "l'"
-        ("l'église", "légliz"),
-        ("l'orage", "lòraj"),
-        ("l'eau", "dlo"),
-        ("l'argent", "lajan"),
-        ("l'heure", "lè"),
+        ("l'église", "légliz-la"),
+        ("l'orage", "lòraj-la"),
+        ("l'eau", "dlo-la"),
+        ("l'argent", "lajan-la"),
+        ("l'heure", "lè-la"),
         
         # Tests avec "du/de l'"
         ("du vin", "diven"),
@@ -93,6 +92,33 @@ def test_rule_00_agglutinated_words():
             f"→ Attendu : '{expected_creole}'\n"
             f"→ Obtenu : '{result}'"
         )
+def test_detect_tense():
+    """Test la détection des temps verbaux français et leur conversion en marqueurs créoles"""
+    test_cases = [
+        # Présent
+        ("mange", "ka"),
+        ("parlons", "ka"),
+        # Futur
+        ("mangerai", "ké"),
+        ("parlerons", "ké"),
+        # Imparfait
+        ("mangeais", "té ka"),
+        ("parlions", "té ka"),
+        # Passé composé
+        ("ai mangé", "té"),
+        ("avons parlé", "té"),
+        # Présent simple (pas de marqueur)
+        ("suis", ""),
+        ("veux", "")
+    ]
+    
+    for verb, expected_marker in test_cases:
+        result = detect_tense(verb)
+        assert result == expected_marker, (
+            f"Pour le verbe '{verb}'\n"
+            f"→ Attendu : '{expected_marker}'\n"
+            f"→ Obtenu : '{result}'"
+        )        
 def test_rule_02_u_to_i():
     """
     Test la règle 2 : transformation du 'u' en 'i'
@@ -500,3 +526,62 @@ def test_rule_19_r_to_w():
             f"→ Attendu : '{expected_creole}'\n"
             f"→ Obtenu : '{result}'"
         )
+def test_singular_articles():
+    test_phrases = [
+        "le chien court",
+        "la maison est grande",
+        "l'homme parle"
+    ]
+    
+    print("Test des articles définis singuliers:")
+    print("-" * 50)
+    for phrase in test_phrases:
+        result = transform_french_to_creole(phrase)
+        print(f"Français : {phrase}")
+        print(f"Créole   : {result}")
+        print("-" * 50)
+def test_plural_articles():
+    test_phrases = [
+        "les enfants jouent",
+        "les oiseaux volent"
+    ]
+    
+    print("\nTest des articles définis pluriels:")
+    print("-" * 50)
+    for phrase in test_phrases:
+        result = transform_french_to_creole(phrase)
+        print(f"Français : {phrase}")
+        print(f"Créole   : {result}")
+        print("-" * 50)
+
+def test_special_cases():
+    test_phrases = [
+        "l'eau est froide",
+        "la mer est bleue"
+    ]
+    
+    print("\nTest des cas spéciaux:")
+    print("-" * 50)
+    for phrase in test_phrases:
+        result = transform_french_to_creole(phrase)
+        print(f"Français : {phrase}")
+        print(f"Créole   : {result}")
+        print("-" * 50)
+def test_mixed_phrases():
+    test_phrases = [
+        "le chien boit l'eau",
+        "les enfants vont à l'école"
+    ]
+    
+    print("\nTest des phrases mixtes:")
+    print("-" * 50)
+    for phrase in test_phrases:
+        result = transform_french_to_creole(phrase)
+        print(f"Français : {phrase}")
+        print(f"Créole   : {result}")
+        print("-" * 50)        
+
+
+
+
+
