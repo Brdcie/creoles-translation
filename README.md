@@ -42,6 +42,6 @@ Ce projet est sous licence Mozilla Public License 2.0 (MPL-2.0)
 Pour toute question ou suggestion, contactez brigitte.democrite@brdcie.com
 
 ## 🔗 Documentation
-- Documentation technique : `docs/TECHNICAL.md`
+- Documentation technique : `TECHNICAL.md`
 - Journal des modifications : `CHANGELOG.md`
 - Guide de contribution : `CONTRIBUTING.md`
