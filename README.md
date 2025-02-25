@@ -40,6 +40,13 @@ Ce projet est sous licence Mozilla Public License 2.0 (MPL-2.0)
 
 ## 📞 Contact
 Pour toute question ou suggestion, contactez brigitte.democrite@brdcie.com
+## 🤝 Projets Associés
+
+### Plateforme de Crowdsourcing
+Ce projet est associé à notre [plateforme de crowdsourcing] https://github.com/Brdcie/creole-crowdsourcing qui permet la validation collaborative des traductions. La plateforme de crowdsourcing :
+- Valide les traductions générées
+- Enrichit la base de données
+- Implique la communauté créolophone
 
 ## 🔗 Documentation
 - Documentation technique : `docs/TECHNICAL.md`
