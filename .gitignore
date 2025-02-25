@@ -71,3 +71,4 @@ tests/*.pyc# Python cache files
 .pytest_cache/
 */**/*.pyc
 Capture*.png
+READMEold.md
