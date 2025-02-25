@@ -49,6 +49,6 @@ Ce projet est associé à notre [plateforme de crowdsourcing] https://github.com
 - Implique la communauté créolophone
 
 ## 🔗 Documentation
-- Documentation technique : `docs/TECHNICAL.md`
+- Documentation technique : `TECHNICAL.md`
 - Journal des modifications : `CHANGELOG.md`
 - Guide de contribution : `CONTRIBUTING.md`
