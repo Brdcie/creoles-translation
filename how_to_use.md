@@ -19,7 +19,7 @@ Creole Translation: Bonjou
 ```
 To exit the script, type:
 ```
-O wouvwè
+Aplita
 Au revoir
 Bye
 ```
