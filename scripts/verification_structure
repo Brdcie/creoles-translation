@@ -1,0 +1,19 @@
+import pandas as pd
+
+# Lire le fichier
+df = pd.read_excel('../data/raw/all_book_pairs_modified.xlsx')
+
+# Vérifier les colonnes
+print("Colonnes présentes:")
+print(df.columns.tolist())
+
+# Afficher les premières lignes
+print("\nPremières lignes:")
+print(df.head())
+
+# Vérifier si la colonne 'section' existe
+if 'section' in df.columns:
+    print("\nSections uniques:")
+    print(df['section'].unique())
+else:
+    print("\nLa colonne 'section' n'existe pas")

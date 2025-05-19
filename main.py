@@ -6,7 +6,7 @@ def main():
         phrase = input("Enter a French sentence: ")
         trad = transform_french_to_creole(phrase)
         print("Creole Translation:", trad)
-        if phrase.lower() in ["o wouvwè", "au revoir", 'bye']:
+        if phrase.lower() in ["Aplita", "au revoir", 'bye']:
             break
 
 

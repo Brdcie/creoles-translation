@@ -17,21 +17,7 @@ logs/
 *.swp
 
 # Ignorer tout dans data/, puis inclure les exceptions
-data/*
-data/processed/selected_french_sentences_by_frequency.csv
-data/processed/selected_french_sentences_sample_100k_filtered.csv
-data/processed/selected_french_sentences_sample_100k_filtered_with_categories.csv
-data/processed/selected_french_sentences_with_categories.csv
-data/processed/selected_french_sentences_with_categories_text.csv
-data/processed/selected_french_sentences_with_cultural.csv
-data/raw/Liste_Rebalanced_french.tsv
-# Exceptions spécifiques dans data/
-!data/raw/
-!data/processed/
-!data/raw/creole_french_pairs_reference.xlsx
-!data/raw/creole_french_pairs.csv
-!data/processed/cleaned_french_sentences.csv
-
+data/
 # Fichiers documents
 *.pdf
 *.epub
