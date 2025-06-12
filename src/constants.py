@@ -12,7 +12,108 @@ PRONOUN_MAPPING = {
 
 # Pattern pour la détection des pronoms
 PRONOUN_PATTERN = r"(je|tu|il|elle|nous|vous|ils|elles)"
+# Verbes irréguliers - mapping complet
+IRREGULAR_VERBS = {
+    # Verbe FAIRE
+    'fais': 'fè',
+    'fait': 'fè', 
+    'faisons': 'fè',
+    'faites': 'fè',
+    'font': 'fè',
+    'faisais': 'fè',
+    'faisait': 'fè',
+    'faisions': 'fè',
+    'faisiez': 'fè',
+    'faisaient': 'fè',
+    'ferai': 'fè',
+    'feras': 'fè',
+    'fera': 'fè',
+    'ferons': 'fè',
+    'ferez': 'fè',
+    'feront': 'fè',
+    
+    # Verbe ÊTRE
+    'suis': 'yé',
+    'es': 'yé',
+    'est': 'yé',
+    'sommes': 'yé',
+    'êtes': 'yé',
+    'sont': 'yé',
+    'étais': 'yé',
+    'était': 'yé',
+    'étions': 'yé',
+    'étiez': 'yé',
+    'étaient': 'yé',
+    
+    # Verbe AVOIR
+    'ai': 'ni',
+    'as': 'ni',
+    'a': 'ni',
+    'avons': 'ni',
+    'avez': 'ni',
+    'ont': 'ni',
+    'avais': 'ni',
+    'avait': 'ni',
+    'avions': 'ni',
+    'aviez': 'ni',
+    'avaient': 'ni',
+    
+    # Verbe ALLER
+    'vais': 'kay',
+    'vas': 'kay',
+    'va': 'kay',
+    'allons': 'kay',
+    'allez': 'kay',
+    'vont': 'kay',
+    'allais': 'kay',
+    'allait': 'kay',
+    'allions': 'kay',
+    'alliez': 'kay',
+    'allaient': 'kay',
+}
 
+# Racines des verbes irréguliers pour la détection
+IRREGULAR_VERB_ROOTS = {
+    'faire', 'être', 'avoir', 'aller', 'dire', 'pouvoir', 'vouloir', 
+    'savoir', 'devoir', 'voir', 'prendre', 'venir', 'partir', 'sortir'
+}
+# Règles pour les verbes du premier groupe
+FIRST_GROUP_VERB_PATTERNS = {
+    # Présent
+    r'\b(\w+)e\b$': r'\1é',      # mange → manjé
+    r'\b(\w+)es\b$': r'\1é',     # manges → manjé  
+    r'\b(\w+)ons\b$': r'\1é',    # mangeons → manjé
+    r'\b(\w+)ez\b$': r'\1é',     # mangez → manjé
+    r'\b(\w+)ent\b$': r'\1é',    # mangent → manjé
+    # Futur - CORRECTION ICI
+    r'^(\w+)erai$': r'\1é',   # mangerai → manjé (pas manjré)
+    r'^(\w+)eras$': r'\1é',   # mangeras → manjé
+    r'^(\w+)era$': r'\1é',    # mangera → manjé
+    r'^(\w+)erons$': r'\1é',  # mangerons → manjé
+    r'^(\w+)erez$': r'\1é',   # mangerez → manjé
+    r'^(\w+)eront$': r'\1é',  # mangeront → manjé
+    
+    # Imparfait (déjà géré par les marqueurs temporels, mais transformation du verbe)
+    r'\b(\w+)ais\b$': r'\1é',    # mangeais → manjé
+    r'\b(\w+)ait\b$': r'\1é',    # mangeait → manjé
+    r'\b(\w+)ions\b$': r'\1é',   # mangions → manjé
+    r'\b(\w+)iez\b$': r'\1é',    # mangiez → manjé
+    r'\b(\w+)aient\b$': r'\1é',  # mangeaient → manjé
+    
+    # Futur
+    r'\b(\w+)erai\b$': r'\1é',   # mangerai → manjé
+    r'\b(\w+)eras\b$': r'\1é',   # mangeras → manjé
+    r'\b(\w+)era\b$': r'\1é',    # mangera → manjé
+    r'\b(\w+)erons\b$': r'\1é',  # mangerons → manjé
+    r'\b(\w+)erez\b$': r'\1é',   # mangerez → manjé
+    r'\b(\w+)eront\b$': r'\1é',  # mangeront → manjé
+}
+
+# Exceptions - verbes qui ne suivent pas cette règle
+FIRST_GROUP_EXCEPTIONS = {
+    'être', 'avoir', 'aller', 'faire', 'dire', 'pouvoir', 'vouloir', 'savoir',
+    'devoir', 'voir', 'prendre', 'venir', 'partir', 'sortir', 'mettre', 'croire'
+}
 # Patterns de temps verbaux
 TENSE_PATTERNS = {
     'future': r'^.*(?:rai|ras|ra|rons|rez|ront)$',
